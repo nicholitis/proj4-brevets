@@ -57,6 +57,7 @@
   <div class="col-md-4">
     <label>Distance</label>
   <select name="distance" id="brevet_dist_km">
+    <!--below vals need to be sent over-->
     <option value="200">200km</option>
     <option value="300">300km</option>
     <option value="400">400km</option>
@@ -126,15 +127,18 @@
     var km = control.find("input[name='km']").val();
     var open_time_field = control.find("input[name='open']");
     var close_time_field = control.find("input[name='close']");
+    var brevet_dist = $("#brevet_dist_km").val();
+    var date = $("#begin_date").val();
+    var time = $("#begin_time").val();
     
-    $.getJSON(TIME_CALC_URL, { km: km }, 
+    $.getJSON(TIME_CALC_URL, { km: km , brevet_dist: brevet_dist, date: date, time: time}, 
       // response handler
       function(data) {
          var times = data.result;
          console.log("Got a response: " +  times);
          console.log("Response.open = " + times.open);
-         open_time_field.val( moment(times.open).format("ddd M/D H:mm"));
-         close_time_field.val( moment(times.close).format("ddd M/D H:mm"));
+         open_time_field.val( moment.utc(times.open).format("ddd M/D H:mm"));
+         close_time_field.val( moment.utc(times.close).format("ddd M/D H:mm"));
        } // end of handler function
      );// End of getJSON
     }
